@@ -4,6 +4,23 @@ Verified against the Audio Unit Extension App template in Xcode 27.0 (27A5209h).
 File names assume the product name `AUv3Template`; Xcode then names the extension `AUv3TemplateExtension`
 and prefixes generated files with it. If you pick another name, rename the `AUv3TemplateExtension` prefix accordingly.
 
+## Quick path: command line (no Xcode GUI)
+
+`Tools/generate-project.sh` assembles Apple's template sources from the installed Xcode plus `TemplateSources/`
+into `build/AUv3Template/` via XcodeGen (one multiplatform iOS + macOS app and extension):
+
+```bash
+TEAM_ID=XXXXXXXXXX BUNDLE_PREFIX=com.yourname AU_MANUFACTURER=Abcd Tools/generate-project.sh
+cd build/AUv3Template
+xcodebuild -scheme AUv3Template -destination 'platform=macOS' -allowProvisioningUpdates build
+xcodebuild -scheme AUv3Template -destination 'id=<device id>' -allowProvisioningUpdates build
+```
+
+Set `DEVELOPER_DIR` to use a specific Xcode (e.g. Xcode-beta). On macOS, register with
+`lsregister -f -R <app>` + `pluginkit -a <appex>` (or launch the app once), then `auval -v aumu LqGl <manufacturer>`.
+
+The steps below are the manual (Xcode GUI) equivalent.
+
 ## 1. Generate the project
 
 Xcode > File > New > Project > Multiplatform > **Audio Unit Extension App**
@@ -51,6 +68,11 @@ The app then has a segmented switch: **In-process SwiftUI** vs **AUv3 view (exte
   Parameter targets are relaxed atomics written from the main thread; frequency/gain math runs only on change.
 - UI: interactive Liquid Glass knob and fader in a `GlassEffectContainer`, a glass panel, an animated test backdrop,
   and an on-screen label with process / OS / accessibility state for screenshots.
+
+## Gotcha: keep the app's inter-app-audio entitlement
+
+The generated `AUv3Template.entitlements` contains `inter-app-audio`. Keep it: on iOS/iPadOS the embedded AUv3 is
+not registered without it, and the app dies in `SimplePlayEngine` with "Failed to find component".
 
 ## Test
 
