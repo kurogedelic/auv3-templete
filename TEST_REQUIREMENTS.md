@@ -32,7 +32,12 @@ The test is specifically for the system Liquid Glass implementation.
 
 ## T1 — Standalone baseline
 
-Launch the containing app on iPad.
+Launch the containing app on iPad. Test both modes of the app's segmented switch:
+
+- **In-process SwiftUI** — the true baseline; InstrumentView is rendered by the app process.
+- **AUv3 view (extension)** — the extension's view controller, rendered out of process as in Logic.
+
+If in-process passes and the extension view already fails here, the cause is the remote-view path, not Logic.
 
 PASS when:
 - SwiftUI UI renders correctly.
@@ -70,6 +75,10 @@ FAIL when:
 - The extension crashes or the UI becomes unusable.
 
 Record screenshots/video of both standalone and hosted states at the same UI settings.
+
+Note: the extension UI runs in a separate process, so its glass cannot refract Logic's own UI behind it.
+Judge the glass against InstrumentView's built-in animated backdrop, which is identical in every mode.
+The on-screen context label identifies the rendering process, OS version and accessibility state.
 
 ## T4 — Host window resizing
 

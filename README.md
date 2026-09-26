@@ -1,18 +1,19 @@
 # AUv3 SwiftUI Instrument Template
 
-Minimal iOS/iPadOS AUv3 instrument starter for current Xcode.
+Minimal iOS/iPadOS + macOS AUv3 instrument starter for current Xcode.
 
 - AUv3 Instrument (MIDI in, audio out)
 - monophonic sine oscillator
 - Pitch parameter: -24...+24 semitones
 - Volume parameter: -60...0 dB
 - SwiftUI UI shared by the containing app and Audio Unit extension
-- Liquid Glass controls on iOS/iPadOS 26+
-- C++ real-time DSP via Apple's current Audio Unit Extension App template architecture
+- Liquid Glass controls on iOS/iPadOS 26+ and macOS 26+
+- All UI, parameters and hosting in Swift/SwiftUI (no UIKit/AppKit UI layer, no Mac Catalyst): iOS/iPadOS and native macOS from the same sources
+- C++ real-time DSP kernel only, as in Apple's current Audio Unit Extension App template
 
 ## Why this repo is source-first
 
-Apple's Audio Unit Extension App template is versioned with Xcode and is the recommended project scaffold. Generate the Xcode project with **File > New > Project > Multiplatform > Audio Unit Extension App**, select **Instrument** and **SwiftUI**, then replace/add the files in `TemplateSources/`.
+Apple's Audio Unit Extension App template is versioned with Xcode and is the recommended project scaffold. Generate the Xcode project with **File > New > Project > Multiplatform > Audio Unit Extension App**, select **Instrument** and **SwiftUI**, then replace/add the files in `TemplateSources/` (full-file replacements of the generated files, checked against Xcode 27.0).
 
 This avoids freezing a stale hand-written `.pbxproj` while keeping the reusable AU code here.
 
